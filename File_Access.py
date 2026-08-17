@@ -1,8 +1,8 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
+from fastapi.responses import FileResponse
 from uuid import uuid4, UUID
 from pathlib import Path
 #from pydantic import BaseModel, Field 
-
 
 app = FastAPI(title = "File Access API", description = "API for accessing files securely", version = "1.0.0")
 
@@ -46,4 +46,15 @@ async def file_detail(name: str ):
                 "filetype" : data["filetype"]
             }
     raise HTTPException(status_code=404, detail="file not found")
+
+@app.get("/files/{filename}/download")
+async def download_file(name: str):
+    for item in target.iterdir():
+        if item.stem == name:
+            return FileResponse(
+                path = item,
+                filename= item.name      
+    )
+    raise HTTPException(status_code=404, detail= "File not found")
+    
         

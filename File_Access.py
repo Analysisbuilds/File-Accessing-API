@@ -47,7 +47,7 @@ async def file_detail(name: str ):
             }
     raise HTTPException(status_code=404, detail="file not found")
 
-@app.get("/files/{filename}/download")
+@app.get("/files/{name}/download")
 async def download_file(name: str):
     for item in target.iterdir():
         if item.stem == name:
@@ -56,5 +56,18 @@ async def download_file(name: str):
                 filename= item.name      
     )
     raise HTTPException(status_code=404, detail= "File not found")
+
+@app.delete("/files/{name}")
+async def delete_file(name: str):
+    for i in target.iterdir():
+        if i.stem == name:
+            i.unlink()
+            for key, data in files.items():
+                if Path(data["filename"]).stem == name:
+                    del files[key]
+                    break
+            return {"message":"file deleted "}
+    raise HTTPException(status_code=404, detail="file not found")
+            
     
         

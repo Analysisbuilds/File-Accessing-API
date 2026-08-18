@@ -35,7 +35,7 @@ async def upload_file(file: UploadFile= File(...)):
         "message": "File uploaded successfully"
         }
         
-@app.get("/files/details")
+@app.get("/file/details")
 async def file_detail(name: str ):
     for key, data in files.items():
         filename = Path(data["filename"]).stem
@@ -68,6 +68,8 @@ async def delete_file(name: str):
                     break
             return {"message":"file deleted "}
     raise HTTPException(status_code=404, detail="file not found")
+
+
             
     
         
